@@ -1,4 +1,4 @@
-package base62
+package core
 
 import "bytes"
 
@@ -10,32 +10,35 @@ type Base62 struct {
 	lookup     []byte
 }
 
-const BASE  = "06TLetOFlcijmbuDH4NRI5Vs3MZXfxnYB1SgQpy8qPAordvJhaG7EkUC92wWKz"
+const BASE = "06TLetOFlcijmbuDH4NRI5Vs3MZXfxnYB1SgQpy8qPAordvJhaG7EkUC92wWKz"
 
 func (base62 *Base62) Encode(message string) (encoded string) {
 	messageBytes := TranslateStringToByteArray(message)
-	encoded = TranslateByteArrayToString(translate(Convert(messageBytes, base62.sourceBase, base62.targetBase),base62.alphabet))
+	encoded = TranslateByteArrayToString(translate(Convert(messageBytes, base62.sourceBase, base62.targetBase), base62.alphabet))
 	return
 }
 
 func (base62 *Base62) Decode(encoded string) (message string) {
-	encodedBytes := translate(TranslateStringToByteArray(encoded),base62.lookup)
-	message = TranslateByteArrayToString(Convert(encodedBytes,base62.targetBase,base62.sourceBase))
+	encodedBytes := translate(TranslateStringToByteArray(encoded), base62.lookup)
+	message = TranslateByteArrayToString(Convert(encodedBytes, base62.targetBase, base62.sourceBase))
 	return
 }
 
 func (base62 *Base62) createLookupTable() {
-	base62.lookup = make([]byte,256)
+	base62.lookup = make([]byte, 256)
 	for k, v := range base62.alphabet {
 		base62.lookup[v] = byte(k)
 	}
 }
 
-func GetBase62Instance() *Base62 {
+func GetBase62Instance(alphabet string) *Base62 {
+	if len(alphabet) == 0 {
+		alphabet = BASE
+	}
 	base62 := &Base62{
 		sourceBase: 256,
 		targetBase: 62,
-		alphabet:   TranslateStringToByteArray(BASE),
+		alphabet:   TranslateStringToByteArray(alphabet),
 	}
 	base62.createLookupTable()
 	return base62

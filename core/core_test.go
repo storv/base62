@@ -1,4 +1,4 @@
-package base62
+package core
 
 import (
 	. "github.com/smartystreets/goconvey/convey"
@@ -7,14 +7,14 @@ import (
 
 
 func TestGetBase62Instance(t *testing.T) {
-	base62 := GetBase62Instance()
+	base62 := GetBase62Instance("")
 	Convey("Base字符串",t,func(){
 		So(base62.Decode(base62.Encode("0a7812af-a426-4403-95b9-7341c454a1a5")),ShouldEqual,"0a7812af-a426-4403-95b9-7341c454a1a5")
 	})
 }
 
 func TestBase62_Encode(t *testing.T) {
-	base62 := GetBase62Instance()
+	base62 := GetBase62Instance("")
 	Convey("Base字符串",t,func(){
 		So(base62.Encode("abcd"),ShouldEqual,"6hgMUQ")
 	})
@@ -22,7 +22,7 @@ func TestBase62_Encode(t *testing.T) {
 }
 
 func TestBase62_Decode(t *testing.T) {
-	base62 := GetBase62Instance()
+	base62 := GetBase62Instance("")
 	Convey("Base字符串",t,func(){
 		So(base62.Decode("6hgMUQ"),ShouldEqual,"abcd")
 	})
